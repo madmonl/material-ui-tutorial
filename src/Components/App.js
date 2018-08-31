@@ -16,7 +16,8 @@ export default class extends Component {
 
   handleExerciseSelect = id => {
     this.setState(({ exercises }) => ({ 
-      exercise: exercises.find(ex => ex.id === id)
+      exercise: exercises.find(ex => ex.id === id),
+      editMode: false
     }));
   }
 
@@ -45,15 +46,29 @@ export default class extends Component {
 
   handleExerciseDelete = id => {
     this.setState(({ exercises }) => ({
-      exercises: exercises.filter((exercise) => exercise.id !== id)
+      exercises: exercises.filter((exercise) => exercise.id !== id),
+      editMode: false,
+      exercise: {}
     }));
   }
 
   handleExerciseSelectEdit = id => 
-    this.setStatte(({ excercises }) => ({
+    this.setState(({ exercises }) => ({
       exercise: exercises.find(ex => ex.id === id),
-      editMode: true
+      editMode: true,
     }))
+
+  handleExerciseEdit = exercise =>{
+    this.setState(({ exercises }) => ({
+      exercises: [
+        ...exercises.filter((ex) => ex.id !== exercise.id),
+        exercise
+      ],
+      exercise
+    }))
+    console.log(this.state.exercise)
+  } 
+  
   
 
   render() {
@@ -71,8 +86,10 @@ export default class extends Component {
           exercises={exercises}
           exercise={exercise}
           editMode={editMode}
+          muscles={muscles}
           onDelete={this.handleExerciseDelete}
           onSelectEdit={this.handleExerciseSelectEdit}
+          onEdit={this.handleExerciseEdit}
         />
         <Footer 
           onSelect={this.handleCategorySelect}

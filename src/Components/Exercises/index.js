@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { Grid, Paper, Typography,List, ListItem,
   ListItemText, ListItemSecondaryAction, IconButton } from 'material-ui';
 import { Delete, Edit } from 'material-ui-icons';
+import Form from './Form';
 
 const styles = {
   Paper: { 
@@ -11,14 +12,17 @@ const styles = {
     marginRight: 10, 
     height: 500, 
     overflowY: 'auto' 
-  }
+  } 
 }
 
 export default ({ 
   exercises,
   category,
   editMode, 
+  muscles,
   onSelect,
+  onEdit,
+  exercise,
   exercise: { 
     id, 
     title = 'Welcome!', 
@@ -66,7 +70,11 @@ export default ({
     <Grid item xs>
       <Paper style={styles.Paper}>
         {editMode
-          ? <Form />
+          ? <Form 
+              exercise={exercise}
+              onSubmit={onEdit}
+              muscles={muscles}
+            />
           : <Fragment>
             <Typography
               variant="display1"
