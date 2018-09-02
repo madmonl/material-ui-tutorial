@@ -3,22 +3,9 @@ import { TextField, Select, Button } from 'material-ui';
 import { FormControl } from 'material-ui/Form'
 import { InputLabel } from 'material-ui/Input'
 import { MenuItem } from 'material-ui/Menu';
-import { withStyles } from 'material-ui/styles'
 
-const styles = theme => ({
-  FormControl: {
-    width: 300
-  }
-})
-
-export default withStyles(styles)(class extends Component {
+export default class extends Component {
   state = this.getInitState();
-  
-  componentWillReceiveProps({ exercise }) {
-    this.setState({
-      ...exercise
-    })
-  }
   
   getInitState () {
     const { exercise } = this.props;
@@ -39,24 +26,23 @@ export default withStyles(styles)(class extends Component {
       id: this.state.title.toLocaleLowerCase().replace(/ /g, '-'),
       ...this.state
     });
-    this.setState(this.getInitState());
   }
 
   render () {
     const { title, description, muscles } = this.state, 
-      { exercise, classes, muscles: categories } = this.props
+      { exercise, muscles: categories } = this.props
 
     return (
       <form>
         <TextField
-          className={classes.FormControl}
           label="Title"
           value={title}
           onChange={this.handleChange('title')}
           margin="normal"
+          fullWidth
         />
         <br />
-        <FormControl className={classes.FormControl}>
+        <FormControl fullWidth>
           <InputLabel htmlFor="muscles">
             Muscles
           </InputLabel>
@@ -73,7 +59,7 @@ export default withStyles(styles)(class extends Component {
         </FormControl>
         <br />
         <TextField
-          className={classes.FormControl}
+          fullWidth
           multiline
           rows="4"
           label="Description"
@@ -86,10 +72,11 @@ export default withStyles(styles)(class extends Component {
           onClick={this.handleSubmit}
           color="primary"
           variant="raised"
+          disabled={!title || !muscles}
         >
           {exercise ? 'Edit' : 'Create'}
         </Button>
       </form>
     );
   };
-});
+};

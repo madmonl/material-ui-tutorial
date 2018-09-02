@@ -5,7 +5,7 @@ import {
   DialogContentText, 
   DialogTitle 
 } from 'material-ui/Dialog';
-import { Add } from 'material-ui-icons';
+import { Add } from '@material-ui/icons';
 import Form from './Form';
 
 export default class extends Component {
@@ -30,11 +30,18 @@ export default class extends Component {
 
     return (
       <Fragment>
-        <Button variant="fab" onClick={this.handleToggle} mini>
+        <Button 
+          color= 'secondary'
+          variant="fab" 
+          onClick={this.handleToggle} 
+          mini
+        >
           <Add />
         </Button>
 
         <Dialog
+          fullWidth
+          maxWidth='xs'
           open={open}
           onClose={this.handleToggle}
         >

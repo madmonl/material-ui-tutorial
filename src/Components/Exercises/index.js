@@ -1,21 +1,44 @@
 import React, { Fragment } from "react";
 import { Grid, Paper, Typography,List, ListItem,
   ListItemText, ListItemSecondaryAction, IconButton } from 'material-ui';
-import { Delete, Edit } from 'material-ui-icons';
+import { Delete, Edit } from '@material-ui/icons';
+import { withStyles } from 'material-ui/styles'
 import Form from './Form';
 
-const styles = {
-  Paper: { 
-    padding: 20, 
-    marginTop: 10, 
-    marginBottom: 10, 
-    marginRight: 10, 
-    height: 500, 
-    overflowY: 'auto' 
-  } 
-}
+const styles = theme => ({
+  paper: { 
+    padding: theme.spacing.unit * 2, 
+    overflowY: 'auto' ,
+    [theme.breakpoints.up('sm')]: {
+      height: 'calc(100% - 10px)',
+      marginTop: 5  
+    },
+    [theme.breakpoints.down('xs')]: {
+      height: '100%',
+    }
+  },
+  '@global': {
+    'html, body, #root': {
+      height: '100%'
+    }
+  },
+  container: {
+    [theme.breakpoints.up('sm')]: {
+      height: 'calc(100% - 64px - 48px)'
+    },
+    [theme.breakpoints.down('xs')]: {
+      height: 'calc(100% - 58px - 48px)'
+    }
+  },
+  item: {
+    [theme.breakpoints.down('xs')]: {
+      height: '50%'
+    }
+  }
+})
 
-export default ({ 
+export default withStyles(styles)(({ 
+  classes,
   exercises,
   category,
   editMode, 
@@ -31,13 +54,14 @@ export default ({
   onDelete,
   onSelectEdit
 }) => 
-  <Grid container>
-    <Grid item xs>
-      <Paper style={styles.Paper}>
+  <Grid container className={classes.container}>
+    <Grid item className={classes.item} xs={12} sm={6}>
+      <Paper className={classes.paper}>
         {exercises.map(([group, exercises]) => 
           !category || category === group 
             ? <Fragment key={group}>
               <Typography
+                color='secondary'
                 variant="headline"
                 style={{ textTransform: 'capitalize' }}
               >
@@ -52,10 +76,10 @@ export default ({
                   >
                     <ListItemText primary={title}/>
                     <ListItemSecondaryAction>
-                      <IconButton onClick={() => onSelectEdit(id)}>
+                      <IconButton color='primary' onClick={() => onSelectEdit(id)}>
                         <Edit />
                       </IconButton>
-                      <IconButton onClick={() => onDelete (id)}>
+                      <IconButton color='primary' onClick={() => onDelete (id)}>
                         <Delete />
                       </IconButton>
                     </ListItemSecondaryAction>
@@ -67,30 +91,35 @@ export default ({
         )}
       </Paper>
     </Grid>
-    <Grid item xs>
-      <Paper style={styles.Paper}>
-        {editMode
-          ? <Form 
-              exercise={exercise}
-              onSubmit={onEdit}
-              muscles={muscles}
-            />
-          : <Fragment>
-            <Typography
-              variant="display1"
-            >
-              {title}
-            </Typography>
-            <Typography
-              variant="subheading"
-              style={{ marginTop: 20 }}
-            >
-              {description}
-            </Typography>
-          </Fragment>}
+    <Grid item className={classes.item} xs={12} sm={6}>
+      <Paper className={classes.paper}>
+        <Typography
+          variant="display1"
+          gutterBottom
+          color='secondary'
+        >
+          {title}
+        </Typography>
+          {editMode
+            ? <Form
+                // When a key changes the component will
+                // remount, so we don't have to use the
+                // componentWillRecieveProps in Form.
+                key={id}
+                exercise={exercise}
+                onSubmit={onEdit}
+                muscles={muscles}
+              />
+            : <Typography
+                variant="subheading"
+                style={{ marginTop: 20 }}
+              >
+                {description}
+              </Typography>
+            }
       </Paper>
     </Grid>
   </Grid>
-
+)
 
 
